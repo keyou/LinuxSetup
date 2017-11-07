@@ -1,0 +1,3 @@
+deps = {
+	"depot_tools":""
+}
