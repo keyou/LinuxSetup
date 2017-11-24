@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/keyou/chromium/src/v8/.git/hooks'
+let g:netrw_dirhist_2='/home/keyou/.config/google-chrome'
+let g:netrw_dirhist_3='scripts'
+let g:netrw_dirhist_4='/home/keyou/Desktop/tools'

@@ -1,0 +1,100 @@
+#!/bin/bash
+
+echo "load tools-v17.11.13"
+
+INIT_CONFIG_FILE="~/.init-config"
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+USER_NAME=
+VIM_CONFIG=
+INITING=$([ -f "$INIT_CONFIG_FILE" ];echo $?)
+
+load_script()
+{
+    if [ -f "$1" ]; then
+        . "$1"
+    fi
+}
+
+init_config()
+{
+    if [ -f "$1" ]; then
+        mv -f "$1" "$1".old
+    fi
+
+    read -r -p "Enter your git user name:" USER_NAME
+    echo "export USER_NAME='$USER_NAME'" >> "$1"
+    git_config "$USER_NAME"
+
+    read -r -p "Should I config vim?[y]:" VIM_CONFIG
+    if [ "$VIM_CONFIG" =~ ^[nN]+$ ] ; then
+        VIM_CONFIG=n
+    else
+        VIM_CONFIG=y
+        vim_config
+    fi
+    echo "export VIM_CONFIG=$VIM_CONFIG" >> "$1"
+
+}
+
+git_config()
+{
+    source $SCRIPTPATH/git/git-prompt.sh
+    PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
+
+    git config --global user.email "$1@cvte.com"
+    git config --global user.name "$1"
+    git config --global push.default simple
+    git config --global core.autocrlf false
+    git config --global core.filemode false
+    git config --global color.ui true
+    git config --global alias.co commit
+    git config --global alias.br branch
+    git config --global alias.st status
+    git config --global alias.fe fetch
+    git config --global alias.ch checkout
+    git config --global alias.lg "log --oneline --decorate --graph -20"
+    git config --global alias.lg "log --graph --pretty=format:'%C(yellow)%h%Creset %C(green)%d%Creset %s %C(dim white)<%an>%Creset %C(dim white)(%cr)%C(reset)' --abbrev-commit -20"
+    git config --global alias.lga "log --graph --pretty=format:'%C(yellow)%h%Creset %C(green)%d%Creset %s %C(dim white)<%an>%Creset %C(dim white)(%cr)%C(reset)' --abbrev-commit -20 --all"
+    # ignore the tracked file
+    git config --global alias.ignore "update-index --assume-unchanged"
+    # unignore the tracked file
+    git config --global alias.unignore "update-index --no-assume-unchanged"
+    # display all ignored tracked files
+    git config --global alias.ignored "!git ls-files -v | grep '^[[:lower:]]'"
+}
+
+vim_config()
+{
+    if [ -f "~/.vimrc" ]; then
+        mv "~/.vimrc" "~/.vimrc.old"
+    fi
+    if [ -d "~/.vim" ]; then
+        mv "~/.vim" "~/.vim.old"
+    fi
+    
+    ln -s "$SCRIPTPATH/vim/.vimrc" "~/.vimrc"
+    ln -s "$SCRIPTPATH/vim/.vim" "~/.vim"
+}
+
+load_script "$INIT_CONFIG_FILE"
+if [ $INITING ]; then 
+    init_config "$INIT_CONFIG_FILE"
+fi
+git_config "$USER_NAME"
+
+export PATH=$SCRIPTPATH/tools:$PATH
+export PATH=$SCRIPTPATH/depot_tools:$PATH
+
+export DEPOT_TOOLS_UPDATE=0
+
+alias viminit='vim $SCRIPT'
+alias sourceinit='source $SCRIPT'
+
+export PATH=$SCRIPTPATH/ripgrep:$PATH
+source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
+
+if [ -f $SCRIPTPATH/.initrc ]; then
+    . ~/.initrc
+fi
+
