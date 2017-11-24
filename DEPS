@@ -1,3 +1,3 @@
 deps = {
-	"depot_tools":""
+	"depot_tools":"git@github.com:keyou/depot_tools.git"
 }

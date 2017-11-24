@@ -65,6 +65,17 @@ nnoremap <C-k> :bprev<CR>
 
 nnoremap <C-h> <C-w>w
 nnoremap <C-l> <C-w>W
-:imap <C-i> <Esc>
+:imap jj <Esc>
+"inoremap <C-i> <Esc>
+"inoremap <M-i> <Esc>
+
 nnoremap <C-x> :bd<CR>
+
+" Use ; for : in normal and visual mode, less keystrokes
+nnoremap ; :
+vnoremap ; :
+
+nnoremap <silent> <C-s> :<C-u>update<CR>
+vnoremap <silent> <C-s> <C-C>:update<CR>
+inoremap <silent> <C-s> <C-C>:update<CR>
 

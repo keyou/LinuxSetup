@@ -1,9 +1,12 @@
 #!/bin/bash
 
-echo "load tools-v17.11.13"
+echo "load tools-v17.11.24"
 
-INIT_CONFIG_FILE="~/.init-config"
-SCRIPT=$(readlink -f "$0")
+# disable bash flow control(C-s/C-q)
+stty -ixon
+
+INIT_CONFIG_FILE="$HOME/.init.conf"
+SCRIPT=$(readlink -f "$BASH_SOURCE")
 SCRIPTPATH=$(dirname "$SCRIPT")
 USER_NAME=
 VIM_CONFIG=
@@ -27,7 +30,7 @@ init_config()
     git_config "$USER_NAME"
 
     read -r -p "Should I config vim?[y]:" VIM_CONFIG
-    if [ "$VIM_CONFIG" =~ ^[nN]+$ ] ; then
+    if [[ "$VIM_CONFIG" =~ ^[nN]+$ ]] ; then
         VIM_CONFIG=n
     else
         VIM_CONFIG=y
@@ -66,19 +69,19 @@ git_config()
 
 vim_config()
 {
-    if [ -f "~/.vimrc" ]; then
-        mv "~/.vimrc" "~/.vimrc.old"
+    if [ -f "$HOME/.vimrc" ]; then
+        mv "$HOME/.vimrc" "$HOME/.vimrc.old"
     fi
-    if [ -d "~/.vim" ]; then
-        mv "~/.vim" "~/.vim.old"
+    if [ -d "$HOME/.vim" ]; then
+        mv "$HOME/.vim" "$HOME/.vim.old"
     fi
     
-    ln -s "$SCRIPTPATH/vim/.vimrc" "~/.vimrc"
-    ln -s "$SCRIPTPATH/vim/.vim" "~/.vim"
+    ln -s "$SCRIPTPATH/vim/.vimrc" "$HOME/.vimrc"
+    ln -s "$SCRIPTPATH/vim/.vim" "$HOME/.vim"
 }
 
 load_script "$INIT_CONFIG_FILE"
-if [ $INITING ]; then 
+if [ $INITING = 1 ]; then 
     init_config "$INIT_CONFIG_FILE"
 fi
 git_config "$USER_NAME"
@@ -95,6 +98,6 @@ export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 
 if [ -f $SCRIPTPATH/.initrc ]; then
-    . ~/.initrc
+    . $SCRIPTPATH/.initrc
 fi
 
