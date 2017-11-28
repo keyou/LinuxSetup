@@ -93,6 +93,8 @@ export DEPOT_TOOLS_UPDATE=0
 
 alias viminit='vim $SCRIPT'
 alias sourceinit='source $SCRIPT'
+alias e=vim
+alias rg='rg -C 1 -F'
 
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion

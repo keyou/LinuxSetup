@@ -1,6 +1,7 @@
 set number
 set showmatch
 set nobackup
+set noswapfile
 
 " change tab to 4 spaces
 set tabstop=4
@@ -19,6 +20,10 @@ set scrolloff=10
 set background=dark
 set t_Co=256
 
+set tags=tags;
+set autochdir
+let Tlist_auto_open=1
+
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
@@ -28,6 +33,7 @@ Plug 'haya14busa/incsearch.vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-scripts/taglist.vim'
 
 "Plug 'bling/vim-bufferline'
 
