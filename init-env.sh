@@ -38,6 +38,14 @@ init_config()
     fi
     echo "export VIM_CONFIG=$VIM_CONFIG" >> "$1"
 
+    read -r -p "Should I config tmux?[y]:" TMUX_CONFIG
+    if [[ "$TMUX_CONFIG" =~ ^[nN]+$ ]] ; then
+        TMUX_CONFIG=n
+    else
+        TMUX_CONFIG=y
+        tmux_config
+    fi
+    echo "export TMUX_CONFIG=$TMUX_CONFIG" >> "$1"
 }
 
 git_config()
@@ -80,11 +88,19 @@ vim_config()
     ln -s "$SCRIPTPATH/vim/.vim" "$HOME/.vim"
 }
 
+tmux_config()
+{
+    if [ -f "$HOME/.tmux.conf" ]; then
+        mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.old"
+    fi
+    
+    ln -s "$SCRIPTPATH/tmux/.tmux.conf" "$HOME/.tmux.conf"
+}
+
 load_script "$INIT_CONFIG_FILE"
 if [ $INITING = 1 ]; then 
     init_config "$INIT_CONFIG_FILE"
 fi
-git_config "$USER_NAME"
 
 export PATH=$SCRIPTPATH/tools:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH

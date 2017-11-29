@@ -1,3 +1,4 @@
 /depot_tools
 *.swp
+.initrc
 
