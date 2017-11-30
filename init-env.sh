@@ -27,14 +27,14 @@ init_config()
 
     read -r -p "Enter your git user name:" USER_NAME
     echo "export USER_NAME='$USER_NAME'" >> "$1"
-    git_config "$USER_NAME"
+    init_git_config "$USER_NAME"
 
     read -r -p "Should I config vim?[y]:" VIM_CONFIG
     if [[ "$VIM_CONFIG" =~ ^[nN]+$ ]] ; then
         VIM_CONFIG=n
     else
         VIM_CONFIG=y
-        vim_config
+        init_vim_config
     fi
     echo "export VIM_CONFIG=$VIM_CONFIG" >> "$1"
 
@@ -43,12 +43,12 @@ init_config()
         TMUX_CONFIG=n
     else
         TMUX_CONFIG=y
-        tmux_config
+        init_tmux_config
     fi
     echo "export TMUX_CONFIG=$TMUX_CONFIG" >> "$1"
 }
 
-git_config()
+init_git_config()
 {
     source $SCRIPTPATH/git/git-prompt.sh
     PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
@@ -75,7 +75,7 @@ git_config()
     git config --global alias.ignored "!git ls-files -v | grep '^[[:lower:]]'"
 }
 
-vim_config()
+init_vim_config()
 {
     if [ -f "$HOME/.vimrc" ]; then
         mv "$HOME/.vimrc" "$HOME/.vimrc.old"
@@ -88,7 +88,7 @@ vim_config()
     ln -s "$SCRIPTPATH/vim/.vim" "$HOME/.vim"
 }
 
-tmux_config()
+init_tmux_config()
 {
     if [ -f "$HOME/.tmux.conf" ]; then
         mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.old"
@@ -101,6 +101,8 @@ load_script "$INIT_CONFIG_FILE"
 if [ $INITING = 1 ]; then 
     init_config "$INIT_CONFIG_FILE"
 fi
+
+PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
 
 export PATH=$SCRIPTPATH/tools:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH
