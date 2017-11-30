@@ -115,6 +115,7 @@ alias viminit='vim $SCRIPT'
 alias sourceinit='source $SCRIPT'
 alias e=vim
 alias rg='rg -C 1 -F'
+alias tmux='tmux -2'
 
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
