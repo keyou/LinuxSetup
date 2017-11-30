@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load tools-v17.11.24"
+echo "load init-v17.11.30"
 
 # disable bash flow control(C-s/C-q)
 stty -ixon
@@ -25,9 +25,11 @@ init_config()
         mv -f "$1" "$1".old
     fi
 
-    read -r -p "Enter your git user name:" USER_NAME
+    read -r -p "Enter your git email:" USER_EMAIL
+    USER_NAME=${USER_EMAIL%@*}
     echo "export USER_NAME='$USER_NAME'" >> "$1"
-    init_git_config "$USER_NAME"
+    echo "export USER_EMAIL='$USER_EMAIL'" >> "$1"
+    init_git_config "$USER_NAME" "$USER_EMAIL"
 
     read -r -p "Should I config vim?[y]:" VIM_CONFIG
     if [[ "$VIM_CONFIG" =~ ^[nN]+$ ]] ; then
@@ -53,8 +55,8 @@ init_git_config()
     source $SCRIPTPATH/git/git-prompt.sh
     PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
 
-    git config --global user.email "$1@cvte.com"
     git config --global user.name "$1"
+    git config --global user.email "$2"
     git config --global push.default simple
     git config --global core.autocrlf false
     git config --global core.filemode false
