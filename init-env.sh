@@ -119,6 +119,8 @@ alias rg='rg -C 1 -F'
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 
+export TERM="xterm-256color"
+
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
 fi
