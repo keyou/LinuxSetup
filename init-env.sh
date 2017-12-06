@@ -120,6 +120,8 @@ alias tmux='tmux -2'
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 
+source $SCRIPTPATH/tmux/tmux.bash-completion
+
 export TERM="xterm-256color"
 
 if [ -f $SCRIPTPATH/.initrc ]; then
