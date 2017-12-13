@@ -99,6 +99,16 @@ init_tmux_config()
     ln -s "$SCRIPTPATH/tmux/.tmux.conf" "$HOME/.tmux.conf"
 }
 
+init_other_config()
+{   
+    if [ ! -d "$HOME/bin" ]; then
+        mkdir "$HOME/bin"
+    fi
+    if [ ! -f "$HOME/bin/move-to-next-monitor" ]; then
+        ln -s "$SCRIPTPATH/tools/move-to-next-monitor" "$HOME/bin/move-to-next-monitor"
+    fi
+}
+
 load_script "$INIT_CONFIG_FILE"
 if [ $INITING = 1 ]; then 
     init_config "$INIT_CONFIG_FILE"
