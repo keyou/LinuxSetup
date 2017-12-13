@@ -42,6 +42,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/taglist.vim'
 Plug 'edkolev/tmuxline.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 
 "Plug 'bling/vim-bufferline'
 
