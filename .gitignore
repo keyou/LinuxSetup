@@ -2,4 +2,5 @@
 *.swp
 .initrc
 .backup
+/vim/.vim
 
