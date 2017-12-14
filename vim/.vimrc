@@ -74,6 +74,8 @@ let g:airline#extensions#tmuxline#enabled = 1
 "let g:bufferline_show_bufnr = 1
 "let g:bufferline_echo = 0
 
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_user_command = 'find %s -type f'
 
 "Window splitting remap"
 nnoremap <C-j> :bnext<CR>

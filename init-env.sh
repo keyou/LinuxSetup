@@ -118,12 +118,14 @@ PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1
 
 export PATH=$SCRIPTPATH/tools:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH
+export MANPATH=$SCRIPTPATH/man:$MANPATH
 
 export DEPOT_TOOLS_UPDATE=0
 
 alias viminit='vim $SCRIPT'
 alias sourceinit='source $SCRIPT'
 alias e=vim
+alias v=vim
 alias rg='rg -C 1 -F'
 alias tmux='tmux -2'
 
