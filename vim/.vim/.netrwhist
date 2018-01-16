@@ -1,11 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =9
-let g:netrw_dirhist_1='/home/keyou/chromium/src/v8/.git/hooks'
-let g:netrw_dirhist_2='/home/keyou/.config/google-chrome'
-let g:netrw_dirhist_3='scripts'
-let g:netrw_dirhist_4='/home/keyou/Desktop/tools'
-let g:netrw_dirhist_5='/home/keyou/dev/chromium/src/chrome/browser/chromeos/extensions'
-let g:netrw_dirhist_6='/usr/share/compiz/scale'
-let g:netrw_dirhist_7='/usr/share/compiz/scale/images'
-let g:netrw_dirhist_8='/home/keyou/dev/chromium/src/chrome/browser/ui'
-let g:netrw_dirhist_9='/home/keyou/dev/chromium/src/chrome/browser/ui/webui'
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/var/crash'

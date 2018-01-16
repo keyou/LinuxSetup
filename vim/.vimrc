@@ -22,7 +22,7 @@ set background=dark
 set t_Co=256
 
 set tags=tags;
-set autochdir
+set noautochdir
 let Tlist_auto_open=1
 
 set nocompatible
@@ -43,6 +43,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/taglist.vim'
 Plug 'edkolev/tmuxline.vim'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-scripts/Conque-GDB'
 
 "Plug 'bling/vim-bufferline'
 
@@ -96,4 +97,18 @@ vnoremap ; :
 nnoremap <silent> <C-s> :<C-u>update<CR>
 vnoremap <silent> <C-s> <C-C>:update<CR>
 inoremap <silent> <C-s> <C-C>:update<CR>
+
+"Disable ConqueTerm F1-F12 quick keys
+let g:ConqueTerm_ToggleKey = ''
+let g:ConqueTerm_SendVisKey = ''
+let g:ConqueTerm_SendFileKey = ''
+let g:ConqueTerm_ExecFileKey = ''
+
+nnoremap <F5> :ConqueGdbCommand continue<CR>
+nnoremap <F6> :ConqueGdbCommand run<CR>
+map <F9> \b
+nnoremap <F10> :ConqueGdbCommand next<CR>
+nnoremap <F11> :ConqueGdbCommand step<CR>
+nnoremap <F12> :ConqueGdbCommand finish<CR>
+
 
