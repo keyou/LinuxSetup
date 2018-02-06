@@ -103,6 +103,7 @@ let g:ConqueTerm_ToggleKey = ''
 let g:ConqueTerm_SendVisKey = ''
 let g:ConqueTerm_SendFileKey = ''
 let g:ConqueTerm_ExecFileKey = ''
+let g:ConqueTerm_CWInsert = 1 
 
 nnoremap <F5> :ConqueGdbCommand continue<CR>
 nnoremap <F6> :ConqueGdbCommand run<CR>
