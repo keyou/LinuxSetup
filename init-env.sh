@@ -61,6 +61,7 @@ init_git_config()
     git config --global core.autocrlf false
     git config --global core.filemode false
     git config --global color.ui true
+    git config --global core.editor "vim"
     git config --global alias.co commit
     git config --global alias.br branch
     git config --global alias.st status
@@ -135,6 +136,8 @@ source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 source $SCRIPTPATH/tmux/tmux.bash-completion
 
 export TERM="xterm-256color"
+
+export PATH=$SCRIPTPATH/p4merge/bin:$PATH
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
