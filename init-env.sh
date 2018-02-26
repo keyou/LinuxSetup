@@ -5,6 +5,11 @@ echo "load init-v17.11.30"
 # disable bash flow control(C-s/C-q)
 stty -ixon
 
+# bind C-w to delete word
+stty werase undef
+bind '\C-w: backward-kill-word'
+
+
 INIT_CONFIG_FILE="$HOME/.init.conf"
 SCRIPT=$(readlink -f "$BASH_SOURCE")
 SCRIPTPATH=$(dirname "$SCRIPT")
