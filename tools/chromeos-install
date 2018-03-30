@@ -1,0 +1,41 @@
+#!/bin/bash
+
+SCRIPT_ROOT=$(dirname "$(readlink -f $0)")
+. $SCRIPT_ROOT/shflags
+DEFINE_string 'src' '' 'SeewoOS image path.' 's'
+DEFINE_string 'dst' '' 'USB device path.' 'd'
+
+FLAGS "$@" || exit 1
+eval set -- "${FLAGS_ARGV}"
+
+#help(){
+#    echo Usage:
+#    echo "  ${0##*/} --src=<image_path> --dst=<usb_device_path>"
+#}
+#
+#for arg in "$@"
+#do
+#case $arg in
+#    --src=*)
+#        SRC="${arg#*=}"
+#        shift 
+#    ;;
+#    --dst=*)
+#        DST="${arg#*=}"
+#        shift
+#    ;;
+#    -h|--help)
+#        help
+#        exit
+#    ;;
+#    *)
+#        echo Unknown args: "$arg"
+#        help
+#        exit 1
+#    ;;
+#esac
+#done
+
+echo Installing $FLAGS_src to $FLAGS_dst
+pv -preb $FLAGS_src | sudo dd of=$FLAGS_dst bs=32M iflag=fullblock oflag=dsync
+

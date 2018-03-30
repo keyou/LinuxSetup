@@ -9,7 +9,8 @@ wget --recursive --no-parent -nd "$url" \
     --accept="update.meta" \
     --accept="update.gz"
 wget --recursive --no-parent -nd "$url" \
-    --accept="signed.*"
+    --accept="signed.*" \
+    --accept="ec.bin" 
 
 popd
 
