@@ -1,7 +1,9 @@
 #!/bin/bash
 
 url="$1"
-dir="${url: -16}"
+#dir="${url: -16}"
+dir="${url%/}"
+dir="${dir##*/}"
 
 [ ! -d "$dir" ] && mkdir -p "$dir"
 pushd "$dir"
