@@ -10,6 +10,26 @@ FLAGS "$@" || exit 1
 eval set -- "${FLAGS_ARGV}"
 # end handle args
 
-echo Installing $FLAGS_src to $FLAGS_dst
-pv -preb $FLAGS_src | sudo dd of=$FLAGS_dst bs=32M iflag=fullblock oflag=dsync
+USBDEVS=($(
+    grep -Hv ^0$ /sys/block/*/removable |
+    sed s/removable:.*$/device\\/uevent/ |
+    xargs grep -H ^DRIVER=sd |
+    sed s/device.uevent.*$/size/ |
+    xargs grep -Hv ^0$ |
+    cut -d / -f 4
+))
+
+
+FDEV=${FLAGS_dst#\'}
+FDEV=${FDEV%\'}
+DEV=${FDEV##*/}
+DEV=${DEV%\'}
+
+if [[ " ${USBDEVS[@]} " =~ " ${DEV} "  ]]; then
+    echo Installing $FLAGS_src to $FLAGS_dst
+    pv -preb $FLAGS_src | sudo dd of=$FLAGS_dst bs=32M iflag=fullblock oflag=dsync
+else
+    echo All USB devices:  ${USBDEVS[*]}
+    echo ERROR: $FDEV is not a USB device.
+fi
 
