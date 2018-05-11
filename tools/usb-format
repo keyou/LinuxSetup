@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# handle args
+SCRIPT_ROOT=$(dirname "$(readlink -f $0)")
+. $SCRIPT_ROOT/shflags
+
+FLAGS "$@" || exit 1
+eval set -- "${FLAGS_ARGV}"
+# end handle args
+
+
+USBDEVS=($(
+    grep -Hv ^0$ /sys/block/*/removable |
+    sed s/removable:.*$/device\\/uevent/ |
+    xargs grep -H ^DRIVER=sd |
+    sed s/device.uevent.*$/size/ |
+    xargs grep -Hv ^0$ |
+    cut -d / -f 4
+))
+
+
+FDEV=${FLAGS_ARGV[0]#\'}
+FDEV=${FDEV%\'}
+DEV=${FDEV##*/}
+DEV=${DEV%\'}
+
+if [[ " ${USBDEVS[@]} " =~ " ${DEV} "  ]]; then
+    echo Formatting $FDEV ...
+    sudo parted $FDEV mklabel msdos -s && \
+        sudo parted $FDEV mkpart primary ntfs 0% 100% -s && \
+        sudo mkfs.ntfs -f ${FDEV}1
+else
+    echo All USB devices:  ${USBDEVS[*]}
+    echo ERROR: $FDEV is not a USB device.
+fi
+
