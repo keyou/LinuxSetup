@@ -8,8 +8,7 @@ dir="${dir##*/}"
 [ ! -d "$dir" ] && mkdir -p "$dir"
 pushd "$dir"
 wget --recursive --no-parent -nd "$url" \
-    --accept="update.meta" \
-    --accept="update*.gz"
+    --accept="update*" 
 wget --recursive --no-parent -nd "$url" \
     --accept="signed*" \
     --accept="ec.bin" 
