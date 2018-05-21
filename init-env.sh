@@ -111,7 +111,7 @@ init_other_config()
         mkdir "$HOME/bin"
     fi
     if [ ! -f "$HOME/bin/move-to-next-monitor" ]; then
-        ln -s "$SCRIPTPATH/tools/move-to-next-monitor" "$HOME/bin/move-to-next-monitor"
+        ln -s "$SCRIPTPATH/bin/move-to-next-monitor" "$HOME/bin/move-to-next-monitor"
     fi
 }
 
@@ -122,7 +122,7 @@ fi
 
 PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
 
-export PATH=$SCRIPTPATH/tools:$PATH
+export PATH=$SCRIPTPATH/bin:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH
 export MANPATH=$SCRIPTPATH/man:$MANPATH
 
@@ -139,6 +139,9 @@ export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 
 source $SCRIPTPATH/tmux/tmux.bash-completion
+
+export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
+source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
 
 export TERM="xterm-256color"
 

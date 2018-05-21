@@ -1,0 +1,160 @@
+#!/bin/sh
+##
+## Copyright (c) 2010, Sebastian Schwarz <seschwar@googlemail.com>
+##
+## Licensed under the MIT License; see accompanying `LICENSE` file.
+##
+
+USAGE="[OPTION | git-log-OPTION]..."
+LONG_USAGE="\
+Options:
+-a, --all                 list all branches/heads
+-b, --branch, --branches  list branches
+    --contains [COMMIT]   list only branches containing COMMIT
+    --head, --heads       list heads; the default
+-h, --help
+-l, --local               list only local branches/heads; the default
+    --merged [COMMIT]     list only branches reachable from COMMIT
+    --no-merged [COMMIT]  list only branches not reachable COMMIT
+-r, --remote              list only remote branches/heads
+
+For the git-log-OPTION see git-log(1)'s manual page."
+OPTIONS_SPEC=
+SUBDIRECTORY_OK="true"
+
+git_exec_path="`git --exec-path`"
+
+ifs="$IFS"
+IFS=":"
+for dir in $git_exec_path; do
+    test -f "$dir/git-sh-setup" -a -r "$dir/git-sh-setup" \
+            && . "$dir/git-sh-setup" && break
+done || {
+    echo "fatal: unable to find and source git-sh-setup in $git_exec_path" >&2
+    exit 1
+}
+IFS="$ifs"
+
+## A newline character.
+N="
+"
+
+
+branch_refs() {
+    git branch "$@" --color=never | sed -e 's/^[ *] //' \
+            -e 's/^(no branch)$/HEAD/' -e 's/ -> .*$//'
+}
+
+
+## git-rev-list topologically sort the revs and annotates the with their
+## children.  Commits without children are heads.
+childless_commits() {
+    branch_refs "$@" | git rev-list --children --stdin --topo-order \
+            | sane_grep -v ' '
+}
+
+
+## prefix PREFIX STRING
+prefix() {
+    test "${2#$1}" != "$2"
+}
+
+
+main() {
+    if git config --get-colorbool color.log; then
+        color_auto="always"
+    else
+        color_auto="never"
+    fi
+    git_branch_args="--color=never"
+    git_branch_scope=""
+    git_log_args="--color=$color_auto$N--max-count=1"
+    mode="heads"
+
+    while test "$#" -gt 0; do
+        case "$1" in
+            (-h|--help)  ## Automatically handled by git(1) and git-sh-setup.  Just
+                usage    ## set $USAGE.
+                ;;
+            (-a|--all)
+                git_branch_scope="-a"
+                shift
+                ;;
+            (-l|--local)
+                git_branch_scope=""
+                shift
+                ;;
+            (-r|--remote)
+                git_branch_scope="-r"
+                shift
+                ;;
+            (-b|--branch|--branches)
+                mode="branches"
+                shift
+                ;;
+            (--head|--heads)
+                mode="heads"
+                shift
+                ;;
+            (--contains|--merged|--no-merged)
+                if test "$#" -lt 2 || prefix - "$2"; then        ## $2 is
+                    git_branch_args="$git_branch_args$N$1=HEAD"  ## another
+                    shift                                        ## argument
+                else
+                    git_branch_args="$git_branch_args$N$1=$2"
+                    shift 2
+                fi
+                mode="branches"
+                ;;
+            (--contains=*|--merged=*|--no-merged=*)
+                git_branch_args="$git_branch_args$N$1"
+                mode="branches"
+                shift
+                ;;
+            (--color)
+                case "$2" in
+                    (always|never)
+                        git_log_args="$git_log_args$N--color=$2"
+                        shift 2
+                        ;;
+                    (auto)
+                        git_log_args="$git_log_args$N--color=$color_auto"
+                        shift 2
+                        ;;
+                    (*)
+                        git_log_args="$git_log_args$N--color"
+                        shift
+                        ;;
+                esac
+                ;;
+            (--color=auto)
+                git_log_args="$git_log_args$N--color=$color_auto"
+                shift
+                ;;
+            (*)
+                git_log_args="$git_log_args$N$1"
+                shift
+                ;;
+        esac
+    done
+
+    IFS="$N"
+    case "$mode" in
+        (branches)
+            branch_refs $git_branch_args $git_branch_scope
+            ;;
+        (heads)
+            childless_commits $git_branch_scope
+            ;;
+        (*)
+            die "unable to list commits for mode $mode"
+            ;;
+    esac | git rev-list --date-order --stdin --no-walk \
+            | while IFS= read -r ref; do
+        echo
+        git log $git_log_args "$ref" -- || exit "$?"
+    done | tail -n +2 | git_pager
+}
+
+
+main "$@"
