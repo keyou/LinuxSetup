@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load init-v17.11.30"
+echo "load init-v18.5.21"
 
 # disable bash flow control(C-s/C-q)
 stty -ixon
