@@ -1,13 +1,14 @@
 #!/bin/bash
 
 url="$1"
-#dir="${url: -16}"
-dir="${url%/}"
-dir="${dir##*/}"
+url="${url%/}"
+dir="${url##*/}"
+# wget need a / in the end of url,or recursive will recursive error.
+url="${url}/"
 
 [ ! -d "$dir" ] && mkdir -p "$dir"
 pushd "$dir"
-wget --recursive --no-parent -nd "$url" \
+wget --recursive --no-parent --no-directories "$url" \
     --accept="update*" 
 wget --recursive --no-parent -nd "$url" \
     --accept="signed*" \

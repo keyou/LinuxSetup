@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# handle args
+SCRIPT_ROOT=$(dirname "$(readlink -f $0)")
+. $SCRIPT_ROOT/shflags
+DEFINE_string 'src' '' 'SeewoOS image web url.' 's'
+DEFINE_string 'dst' '' 'USB device path.' 'd'
+
+FLAGS "$@" || exit 1
+eval set -- "${FLAGS_ARGV}"
+# end handle args
+
+IMAGE_BIN=${FLAGS_src}
+IMAGE_PATH=${IMAGE_BIN%/*}
+IMAGE_NAME=${IMAGE_BIN##*/}
+IMAGE_DIR=${IMAGE_PATH##*/}
+
+FDEV=${FLAGS_dst#\'}
+FDEV=${FDEV%\'}
+
+green=`tput setaf 2`
+reset=`tput sgr0`
+
+chromeos-download $IMAGE_PATH
+echo ${green}== Download finished! ==${reset}
+chromeos-install -s $IMAGE_DIR/$IMAGE_NAME -d $FDEV
+
