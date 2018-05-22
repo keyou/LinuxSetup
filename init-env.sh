@@ -30,6 +30,8 @@ init_config()
         mv -f "$1" "$1".old
     fi
 
+    echo "source $SCRIPT" >> $HOME/.bashrc
+
     read -r -p "Enter your git email:" USER_EMAIL
     USER_NAME=${USER_EMAIL%@*}
     echo "export USER_NAME='$USER_NAME'" >> "$1"
