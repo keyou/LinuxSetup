@@ -137,6 +137,8 @@ alias v=vim
 alias rg='rg -C 1 -F'
 alias tmux='tmux -2'
 
+export PATH=$SCRIPTPATH/p4merge/bin:$PATH
+
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
 
@@ -145,9 +147,10 @@ source $SCRIPTPATH/tmux/tmux.bash-completion
 export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
 source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
 
-export TERM="xterm-256color"
+export PATH=$SCRIPTPATH/ncdu:$PATH
+export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
 
-export PATH=$SCRIPTPATH/p4merge/bin:$PATH
+export TERM="xterm-256color"
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
