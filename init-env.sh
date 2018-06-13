@@ -96,8 +96,8 @@ init_vim_config()
         mv "$HOME/.vim" "$HOME/.vim.old"
     fi
     
-    ln -s "$SCRIPTPATH/vim/.vimrc" "$HOME/.vimrc"
-    ln -s "$SCRIPTPATH/vim/.vim" "$HOME/.vim"
+    ln -s "$SCRIPTPATH/vim/vimrc" "$HOME/.vimrc"
+    ln -s "$SCRIPTPATH/vim/vim" "$HOME/.vim"
 }
 
 init_tmux_config()
@@ -106,7 +106,7 @@ init_tmux_config()
         mv "$HOME/.tmux.conf" "$HOME/.tmux.conf.old"
     fi
     
-    ln -s "$SCRIPTPATH/tmux/.tmux.conf" "$HOME/.tmux.conf"
+    ln -s "$SCRIPTPATH/tmux/tmux.conf" "$HOME/.tmux.conf"
 }
 
 init_other_config()
@@ -152,7 +152,10 @@ source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
 export PATH=$SCRIPTPATH/ncdu:$PATH
 export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
 
+export PATH=$SCRIPTPATH/pet:$PATH
+
 export TERM="xterm-256color"
+
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
