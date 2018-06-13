@@ -98,6 +98,7 @@ init_vim_config()
     
     ln -s "$SCRIPTPATH/vim/vimrc" "$HOME/.vimrc"
     ln -s "$SCRIPTPATH/vim/vim" "$HOME/.vim"
+    vim +PlugInstall +qall
 }
 
 init_tmux_config()
@@ -156,6 +157,11 @@ export PATH=$SCRIPTPATH/pet:$PATH
 
 export TERM="xterm-256color"
 
+if [ $VIM_CONFIG = y ]; then
+    complete -F _fzf_path_completion -o default -o bashdefault rg
+    complete -F _fzf_path_completion -o default -o bashdefault chromeos-dd
+    complete -F _fzf_path_completion -o default -o bashdefault chromeos-install
+fi
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
