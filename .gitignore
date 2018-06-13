@@ -2,6 +2,5 @@
 *.swp
 .initrc
 .backup
-/vim/.vim
-
+/vim/vim/plugged/
 vim/.vim/.netrwhist
