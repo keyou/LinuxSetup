@@ -7,14 +7,20 @@ dir="${url##*/}"
 url="${url}/"
 
 [ ! -d "$dir" ] && mkdir -p "$dir"
-pushd "$dir"
-wget --recursive --no-parent --no-directories "$url" \
-    --accept="update*" 
-wget --recursive --no-parent -nd "$url" \
-    --accept="signed*" \
-    --accept="ec.bin" 
+# pushd "$dir"
+# wget --recursive --no-parent --no-directories "$url" \
+#     --accept="update*" 
+# wget --recursive --no-parent -nd "$url" \
+#     --accept="signed*" \
+#     --accept="ec.bin" 
+# wget --recursive -np -nd "$url" \
+#     --accept="branch*" \
+#     --accept="diff*" \
+#     --accept="sym*"
+# popd
 
-popd
+wget --mirror --no-parent --no-directories --directory-prefix=$dir $url
+rm $dir/index.html
 
 echo Saved to "$dir"
 
