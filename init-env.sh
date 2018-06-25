@@ -161,7 +161,36 @@ if [ $VIM_CONFIG = y ]; then
     complete -F _fzf_path_completion -o default -o bashdefault rg
     complete -F _fzf_path_completion -o default -o bashdefault chromeos-dd
     complete -F _fzf_path_completion -o default -o bashdefault chromeos-install
+    
+    # alt + e : select pet snipet
+    bind -x '"\ee": pet-select'
+    
+    # use fd to list file
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    # To apply the command to CTRL-T as well
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    # To apply the command to ALT-C as well
+    export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+    
+    # Use fd (https://github.com/sharkdp/fd) instead of the default find
+    # command for listing path candidates.
+    # - The first argument to the function ($1) is the base path to start traversal
+    # - See the source code (completion.{bash,zsh}) for the details.
+    _fzf_compgen_path() {
+      fd --hidden --follow --exclude ".git" . "$1"
+    }
+
+    # Use fd to generate the list for directory completion
+    _fzf_compgen_dir() {
+      fd --type d --hidden --follow --exclude ".git" . "$1"
+    }
 fi
+
+function pet-select() {
+  BUFFER=$(pet search --query "$READLINE_LINE")
+  READLINE_LINE=$BUFFER
+  READLINE_POINT=${#BUFFER}
+}
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
