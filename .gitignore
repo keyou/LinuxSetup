@@ -3,4 +3,4 @@
 .initrc
 .backup
 /vim/vim/plugged/
-vim/.vim/.netrwhist
+/vim/vim/.netrwhist
