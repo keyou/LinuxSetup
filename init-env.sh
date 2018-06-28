@@ -167,10 +167,13 @@ if [ $VIM_CONFIG = y ]; then
     
     # use fd to list file
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    # show fzf iniine
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
     # To apply the command to CTRL-T as well
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     # To apply the command to ALT-C as well
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+    
     
     # Use fd (https://github.com/sharkdp/fd) instead of the default find
     # command for listing path candidates.

@@ -81,7 +81,8 @@ let g:airline#extensions#tmuxline#enabled = 1
 "let g:bufferline_echo = 0
 
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_user_command = 'find %s -type f'
+"let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_user_command = 'fd --type f --hidden --follow --exclude .git'
 
 "Window splitting remap"
 nnoremap <C-j> :bnext<CR>
@@ -117,4 +118,6 @@ nnoremap <F10> :ConqueGdbCommand next<CR>
 nnoremap <F11> :ConqueGdbCommand step<CR>
 nnoremap <F12> :ConqueGdbCommand finish<CR>
 
+"FZF
+nnoremap <C-f> :FZF<CR>
 
