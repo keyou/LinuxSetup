@@ -52,6 +52,9 @@ Plug 'junegunn/fzf', {'do': './install --all' }
 
 "Plug 'bling/vim-bufferline'
 
+"Plug 'derekwyatt/vim-fswitch'
+Plug 'ericcurtin/CurtineIncSw.vim'
+
 " Initialize plugin system
 call plug#end()
 

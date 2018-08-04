@@ -22,7 +22,8 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 
 sudo echo ${green}== Begin download. ==${reset}
-chromeos-download $IMAGE_PATH/
+#chromeos-download $IMAGE_PATH/
+chromeos-download $IMAGE_BIN
 echo ${green}== Download finished! ==${reset}
 chromeos-install -s $IMAGE_DIR/$IMAGE_NAME -d $FDEV
 

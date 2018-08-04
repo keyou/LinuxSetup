@@ -25,8 +25,8 @@ FDEV=${FDEV%\'}
 DEV=${FDEV##*/}
 DEV=${DEV%\'}
 
+echo Installing $FLAGS_src to $FLAGS_dst
 if [[ " ${USBDEVS[@]} " =~ " ${DEV} "  ]]; then
-    echo Installing $FLAGS_src to $FLAGS_dst
     pv -preb $FLAGS_src | sudo dd of=$FLAGS_dst bs=32M iflag=fullblock oflag=dsync
 else
     echo All USB devices:  ${USBDEVS[*]}
