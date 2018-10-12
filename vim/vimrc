@@ -30,6 +30,42 @@ highlight LineNr ctermfg=grey
 set cursorline
 highlight CursorLine cterm=NONE
 
+" do not store global and local values in a session
+set ssop-=options
+" do not store folds in a session
+set ssop-=folds  
+
+let mapleader = ' '
+noremap <Space> <Nop>
+
+"Window splitting remap"
+nnoremap <C-j> :bnext<CR>
+nnoremap <C-k> :bprev<CR>
+
+nnoremap <C-h> <C-w>w
+nnoremap <C-l> <C-w>W
+:imap jj <Esc>
+"inoremap <C-i> <Esc>
+"inoremap <M-i> <Esc>
+
+nnoremap <C-x> :bd<CR>
+
+" Use ; for : in normal and visual mode, less keystrokes
+nnoremap ; :
+vnoremap ; :
+
+nnoremap <silent> <C-s> :<C-u>update<CR>
+vnoremap <silent> <C-s> <C-C>:update<CR>
+inoremap <silent> <C-s> <C-C>:update<CR>
+
+nnoremap <Space>p <C-u>
+nnoremap <Space>n <C-d>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"PlugIn
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -42,7 +78,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/taglist.vim'
 Plug 'edkolev/tmuxline.vim'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-scripts/Conque-GDB'
 
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
@@ -54,6 +90,17 @@ Plug 'junegunn/fzf', {'do': './install --all' }
 
 "Plug 'derekwyatt/vim-fswitch'
 Plug 'ericcurtin/CurtineIncSw.vim'
+
+"Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
+Plug 'Rip-Rip/clang_complete', {'do': 'make install'}
+
+" Rg
+Plug 'yegappan/grep'
+
+" Gtags
+Plug 'aceofall/gtags.vim'
+
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 " Initialize plugin system
 call plug#end()
@@ -87,25 +134,6 @@ let g:ctrlp_working_path_mode = 'ra'
 "let g:ctrlp_user_command = 'find %s -type f'
 let g:ctrlp_user_command = 'fd --type f --hidden --follow --exclude .git'
 
-"Window splitting remap"
-nnoremap <C-j> :bnext<CR>
-nnoremap <C-k> :bprev<CR>
-
-nnoremap <C-h> <C-w>w
-nnoremap <C-l> <C-w>W
-:imap jj <Esc>
-"inoremap <C-i> <Esc>
-"inoremap <M-i> <Esc>
-
-nnoremap <C-x> :bd<CR>
-
-" Use ; for : in normal and visual mode, less keystrokes
-nnoremap ; :
-vnoremap ; :
-
-nnoremap <silent> <C-s> :<C-u>update<CR>
-vnoremap <silent> <C-s> <C-C>:update<CR>
-inoremap <silent> <C-s> <C-C>:update<CR>
 
 "Disable ConqueTerm F1-F12 quick keys
 let g:ConqueTerm_ToggleKey = ''
@@ -114,13 +142,40 @@ let g:ConqueTerm_SendFileKey = ''
 let g:ConqueTerm_ExecFileKey = ''
 let g:ConqueTerm_CWInsert = 1 
 
-nnoremap <F5> :ConqueGdbCommand continue<CR>
-nnoremap <F6> :ConqueGdbCommand run<CR>
-map <F9> \b
-nnoremap <F10> :ConqueGdbCommand next<CR>
-nnoremap <F11> :ConqueGdbCommand step<CR>
-nnoremap <F12> :ConqueGdbCommand finish<CR>
+"nnoremap <F5> :ConqueGdbCommand continue<CR>
+"nnoremap <F6> :ConqueGdbCommand run<CR>
+"map <F9> \b
+"nnoremap <F10> :ConqueGdbCommand next<CR>
+"nnoremap <F11> :ConqueGdbCommand step<CR>
+"nnoremap <F12> :ConqueGdbCommand finish<CR>
 
 "FZF
 nnoremap <C-f> :FZF<CR>
+
+"vim beakpoint format to clipboard
+func! CopyAsBreakpoint()
+    let s:pos=expand('%:p') . ':' . line('.')
+    call system("xclip", s:pos)
+ endfunc
+" map to a key
+"map kk <ESC>:call CopyAsBreakpoint()<CR>
+
+"clang_complete
+"path to directory where library can be found
+let g:clang_library_path='/usr/lib/llvm-6.0/lib/libclang.so.1'
+let g:clang_periodic_quickfix=0
+let g:clang_complete_copen=1
+let g:clang_use_library=1
+"let g:clang_auto_user_options="compile_commands.json, .clang_complete, path"
+
+"gtags
+:nmap <C-n> :cn<CR>
+:nmap <C-p> :cp<CR>
+:nmap <C-c><C-d> :GtagsCursor<CR>
+:nmap <C-c><C-c> :cclose<CR>
+:nmap <C-c><C-o> :copen<CR>
+
+"vim-cpp-enhanced-highlight
+let g:cpp_member_variable_highlight = 1
+
 

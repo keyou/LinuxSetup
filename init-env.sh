@@ -5,6 +5,9 @@ echo "load init-v18.5.21"
 # disable bash flow control(C-s/C-q)
 stty -ixon
 
+# disable terminal exit with C-d
+set -o ignoreeof
+
 # bind C-w to delete word
 stty werase undef
 bind '\C-w: backward-kill-word'
@@ -137,8 +140,11 @@ alias viminit='vim $SCRIPT'
 alias sourceinit='source $SCRIPT'
 alias e=vim
 alias v=vim
-alias rg='rg -C 1 -F'
+alias rg-c1='rg -C 1 -F'
 alias tmux='tmux -2'
+alias rg-oneline='rg --no-filename --no-heading -H -F'
+alias rg-all='rg --follow --hidden --no-ignore'
+alias em='emacs -nw'
 
 export PATH=$SCRIPTPATH/p4merge/bin:$PATH
 
@@ -149,6 +155,7 @@ source $SCRIPTPATH/tmux/tmux.bash-completion
 
 export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
 source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
+alias fd-all='fd -HIL'
 
 export PATH=$SCRIPTPATH/ncdu:$PATH
 export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
@@ -194,6 +201,16 @@ function pet-select() {
   READLINE_LINE=$BUFFER
   READLINE_POINT=${#BUFFER}
 }
+
+export HISTTIMEFORMAT="%Y-%m-%d %T "
+
+funcs()
+{
+  local cur
+  cur=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=(`global -c $cur`)
+}
+complete -F funcs global
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
