@@ -59,7 +59,7 @@ init_config()
     fi
     echo "export TMUX_CONFIG=$TMUX_CONFIG" >> "$1"
 
-    sudo snap install insomnia 
+    # sudo snap install insomnia 
 }
 
 init_git_config()
