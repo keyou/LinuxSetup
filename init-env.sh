@@ -2,20 +2,34 @@
 
 echo "load init-v18.5.21"
 
+if [ -n "$BASH_VERSION" ]; then
+    IS_BASH=1
+elif [ -n "$ZSH_VERSION" ]; then
+    IS_ZSH=1
+fi
+
 # disable bash flow control(C-s/C-q)
 stty -ixon
 
 # disable terminal exit with C-d
 set -o ignoreeof
 
-# bind C-w to delete word
 stty werase undef
-bind '\C-w: backward-kill-word'
 
+if [ "$IS_BASH" = 1 ]; then
+    # bind C-w to delete word
+    bind '\C-w: backward-kill-word'
+fi
 
 INIT_CONFIG_FILE="$HOME/.init.conf"
-SCRIPT=$(readlink -f "$BASH_SOURCE")
-SCRIPTPATH=$(dirname "$SCRIPT")
+
+if [ "$IS_BASH" = 1 ]; then
+    SCRIPT=$(readlink -f "$BASH_SOURCE")
+    SCRIPTPATH=$(dirname "$SCRIPT")
+elif [ "$IS_ZSH" = 1 ]; then
+    SCRIPT=${0:a}
+    SCRIPTPATH=${0:a:h}
+fi
 USER_NAME=
 VIM_CONFIG=
 INITING=$([ -f "$INIT_CONFIG_FILE" ];echo $?)
@@ -64,8 +78,6 @@ init_config()
 
 init_git_config()
 {
-    source $SCRIPTPATH/git/git-prompt.sh
-    PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
 
     git config --global user.name "$1"
     git config --global user.email "$2"
@@ -128,7 +140,6 @@ if [ $INITING = 1 ]; then
     init_config "$INIT_CONFIG_FILE"
 fi
 
-PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
 
 export PATH=$SCRIPTPATH/bin:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH
@@ -147,14 +158,22 @@ alias rg-all='rg --follow --hidden --no-ignore'
 alias em='emacs -nw'
 
 export PATH=$SCRIPTPATH/p4merge/bin:$PATH
-
 export PATH=$SCRIPTPATH/ripgrep:$PATH
-source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
-
-source $SCRIPTPATH/tmux/tmux.bash-completion
-
 export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
-source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
+
+if [ "$IS_BASH" = 1 ]; then
+    source $SCRIPTPATH/git/git-prompt.sh
+    PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
+
+    source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
+    source $SCRIPTPATH/tmux/tmux.bash-completion
+    source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
+elif [ $IS_ZSH = 1 ]; then
+    source $SCRIPTPATH/git/git-prompt.sh
+    setopt PROMPT_SUBST
+    PS1=$'\n%F{green}%n@%m%f %F{yellow}%~%f %F{cyan}$(__git_ps1 "(%s)")%f \n$ '
+fi
+
 alias fd-all='fd -HIL'
 
 export PATH=$SCRIPTPATH/ncdu:$PATH
@@ -165,12 +184,15 @@ export PATH=$SCRIPTPATH/pet:$PATH
 export TERM="xterm-256color"
 
 if [ $VIM_CONFIG = y ]; then
-    complete -F _fzf_path_completion -o default -o bashdefault rg
-    complete -F _fzf_path_completion -o default -o bashdefault chromeos-dd
-    complete -F _fzf_path_completion -o default -o bashdefault chromeos-install
-    
-    # alt + e : select pet snipet
-    bind -x '"\ee": pet-select'
+ 
+    if [ "$IS_BASH" = 1 ]; then
+        complete -F _fzf_path_completion -o default -o bashdefault rg
+        complete -F _fzf_path_completion -o default -o bashdefault chromeos-dd
+        complete -F _fzf_path_completion -o default -o bashdefault chromeos-install
+
+        # alt + e : select pet snipet
+        bind -x '"\ee": pet-select'
+    fi
     
     # use fd to list file
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -204,13 +226,15 @@ function pet-select() {
 
 export HISTTIMEFORMAT="%Y-%m-%d %T "
 
-funcs()
-{
-  local cur
-  cur=${COMP_WORDS[COMP_CWORD]}
-  COMPREPLY=(`global -c $cur`)
-}
-complete -F funcs global
+if [ "$IS_BASH" = 1 ]; then
+    funcs()
+    {
+      local cur
+      cur=${COMP_WORDS[COMP_CWORD]}
+      COMPREPLY=(`global -c $cur`)
+    }
+    complete -F funcs global
+fi
 
 if [ -f $SCRIPTPATH/.initrc ]; then
     . $SCRIPTPATH/.initrc
