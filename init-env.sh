@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load init-v18.5.21"
+echo "load init-v19.1.23"
 
 if [ -n "$BASH_VERSION" ]; then
     IS_BASH=1
@@ -73,7 +73,11 @@ init_config()
     fi
     echo "export TMUX_CONFIG=$TMUX_CONFIG" >> "$1"
 
+    # http test
     # sudo snap install insomnia 
+    
+    # screenshot
+    # sudo apt install flameshot
 }
 
 init_git_config()
