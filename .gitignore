@@ -4,3 +4,6 @@
 .backup
 /vim/vim/plugged/
 /vim/vim/.netrwhist
+emacs.d/
+percol/
+
