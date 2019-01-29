@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load init-v19.1.23"
+echo "load init-v19.1.29"
 
 if [ -n "$BASH_VERSION" ]; then
     IS_BASH=1
@@ -49,42 +49,20 @@ init_config()
 
     echo "source $SCRIPT" >> $HOME/.bashrc
 
-    read -r -p "Enter your git email:" USER_EMAIL
-    USER_NAME=${USER_EMAIL%@*}
-    echo "export USER_NAME='$USER_NAME'" >> "$1"
-    echo "export USER_EMAIL='$USER_EMAIL'" >> "$1"
-    init_git_config "$USER_NAME" "$USER_EMAIL"
+    init_git_config 
 
-    read -r -p "Should I config vim?[y]:" VIM_CONFIG
-    if [[ "$VIM_CONFIG" =~ ^[nN]+$ ]] ; then
-        VIM_CONFIG=n
-    else
-        VIM_CONFIG=y
-        init_vim_config
-    fi
+    VIM_CONFIG=y
+    init_vim_config
     echo "export VIM_CONFIG=$VIM_CONFIG" >> "$1"
 
-    read -r -p "Should I config tmux?[y]:" TMUX_CONFIG
-    if [[ "$TMUX_CONFIG" =~ ^[nN]+$ ]] ; then
-        TMUX_CONFIG=n
-    else
-        TMUX_CONFIG=y
-        init_tmux_config
-    fi
+    TMUX_CONFIG=y
+    init_tmux_config
     echo "export TMUX_CONFIG=$TMUX_CONFIG" >> "$1"
 
-    # http test
-    # sudo snap install insomnia 
-    
-    # screenshot
-    # sudo apt install flameshot
 }
 
 init_git_config()
 {
-
-    git config --global user.name "$1"
-    git config --global user.email "$2"
     git config --global push.default simple
     git config --global core.autocrlf false
     git config --global core.filemode false
@@ -117,7 +95,7 @@ init_vim_config()
     
     ln -s "$SCRIPTPATH/vim/vimrc" "$HOME/.vimrc"
     ln -s "$SCRIPTPATH/vim/vim" "$HOME/.vim"
-    vim +PlugInstall +qall
+    #vim +PlugInstall +qall
 }
 
 init_tmux_config()
@@ -129,22 +107,9 @@ init_tmux_config()
     ln -s "$SCRIPTPATH/tmux/tmux.conf" "$HOME/.tmux.conf"
 }
 
-init_other_config()
-{   
-    if [ ! -d "$HOME/bin" ]; then
-        mkdir "$HOME/bin"
-    fi
-    if [ ! -f "$HOME/bin/move-to-next-monitor" ]; then
-        ln -s "$SCRIPTPATH/bin/move-to-next-monitor" "$HOME/bin/move-to-next-monitor"
-    fi
-}
-
-load_script "$INIT_CONFIG_FILE"
-if [ $INITING = 1 ]; then 
-    init_config "$INIT_CONFIG_FILE"
-fi
-
-
+#######################################################
+# Basic config
+export TERM="xterm-256color"
 export PATH=$SCRIPTPATH/bin:$PATH
 export PATH=$SCRIPTPATH/depot_tools:$PATH
 export MANPATH=$SCRIPTPATH/man:$MANPATH
@@ -153,6 +118,23 @@ export DEPOT_TOOLS_UPDATE=0
 
 alias viminit='vim $SCRIPT'
 alias sourceinit='source $SCRIPT'
+
+load_script "$INIT_CONFIG_FILE"
+if [ $INITING = 1 ]; then 
+    init_config "$INIT_CONFIG_FILE"
+fi
+
+######################################################
+# Expert config
+export HISTTIMEFORMAT="%Y-%m-%d %T "
+
+export PATH=$SCRIPTPATH/p4merge/bin:$PATH
+export PATH=$SCRIPTPATH/ripgrep:$PATH
+export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
+export PATH=$SCRIPTPATH/ncdu:$PATH
+export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
+export PATH=$SCRIPTPATH/pet:$PATH
+
 alias e=vim
 alias v=vim
 alias rg-c1='rg -C 1 -F'
@@ -160,10 +142,17 @@ alias tmux='tmux -2'
 alias rg-oneline='rg --no-filename --no-heading -H -F'
 alias rg-all='rg --follow --hidden --no-ignore'
 alias em='emacs -nw'
+alias fd-all='fd -HIL'
 
-export PATH=$SCRIPTPATH/p4merge/bin:$PATH
-export PATH=$SCRIPTPATH/ripgrep:$PATH
-export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
+
+# http test
+# sudo snap install insomnia 
+
+# screenshot
+# sudo apt install flameshot
+
+# diff/merge tool
+# sudo apt install meld
 
 if [ "$IS_BASH" = 1 ]; then
     source $SCRIPTPATH/git/git-prompt.sh
@@ -177,15 +166,6 @@ elif [ $IS_ZSH = 1 ]; then
     setopt PROMPT_SUBST
     PS1=$'\n%F{green}%n@%m%f %F{yellow}%~%f %F{cyan}$(__git_ps1 "(%s)")%f \n$ '
 fi
-
-alias fd-all='fd -HIL'
-
-export PATH=$SCRIPTPATH/ncdu:$PATH
-export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
-
-export PATH=$SCRIPTPATH/pet:$PATH
-
-export TERM="xterm-256color"
 
 if [ $VIM_CONFIG = y ]; then
  
@@ -227,8 +207,6 @@ function pet-select() {
   READLINE_LINE=$BUFFER
   READLINE_POINT=${#BUFFER}
 }
-
-export HISTTIMEFORMAT="%Y-%m-%d %T "
 
 if [ "$IS_BASH" = 1 ]; then
     funcs()
