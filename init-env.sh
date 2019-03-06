@@ -143,6 +143,7 @@ alias rg-oneline='rg --no-filename --no-heading -H -F'
 alias rg-all='rg --follow --hidden --no-ignore'
 alias em='emacs -nw'
 alias fd-all='fd -HIL'
+alias fzfp="fzf --preview 'cat {}'"
 
 
 # http test
@@ -215,7 +216,7 @@ if [ "$IS_BASH" = 1 ]; then
       cur=${COMP_WORDS[COMP_CWORD]}
       COMPREPLY=(`global -c $cur`)
     }
-    complete -F funcs global
+    # complete -F funcs global
 fi
 
 if [ -f $SCRIPTPATH/.initrc ]; then

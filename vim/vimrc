@@ -42,8 +42,8 @@ noremap <Space> <Nop>
 nnoremap <C-k> :bnext<CR>
 nnoremap <C-j> :bprev<CR>
 
-nnoremap <C-h> <C-w>w
-nnoremap <C-l> <C-w>W
+"nnoremap <C-h> <C-w>w
+"nnoremap <C-l> <C-w>W
 :imap jj <Esc>
 "inoremap <C-i> <Esc>
 "inoremap <M-i> <Esc>
@@ -60,8 +60,6 @@ inoremap <silent> <C-s> <C-C>:update<CR>
 
 nnoremap <Space>p <C-u>
 nnoremap <Space>n <C-d>
-
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "PlugIn
@@ -81,10 +79,14 @@ Plug 'edkolev/tmuxline.vim'
 "Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-scripts/Conque-GDB'
 
+" buffer switch
+"Plug 'mihaifm/bufstop'
+
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
 " Both options are optional. You don't have to install fzf in ~/.fzf
 " and you don't have to run install script if you use fzf only in Vim.
 Plug 'junegunn/fzf', {'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 "Plug 'bling/vim-bufferline'
 
@@ -92,15 +94,26 @@ Plug 'junegunn/fzf', {'do': './install --all' }
 Plug 'ericcurtin/CurtineIncSw.vim'
 
 "Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-Plug 'Rip-Rip/clang_complete', {'do': 'make install'}
+"Plug 'Rip-Rip/clang_complete', {'do': 'make install'}
 
 " Rg
 Plug 'yegappan/grep'
 
 " Gtags
-Plug 'aceofall/gtags.vim'
+"Plug 'aceofall/gtags.vim'
 
 Plug 'octol/vim-cpp-enhanced-highlight'
+
+" ctags management
+Plug 'ludovicchabant/vim-gutentags'
+" gutentags for gtags
+Plug 'skywind3000/gutentags_plus'
+
+" CLS
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
 
 " Initialize plugin system
 call plug#end()
@@ -142,6 +155,9 @@ let g:ConqueTerm_SendFileKey = ''
 let g:ConqueTerm_ExecFileKey = ''
 let g:ConqueTerm_CWInsert = 1 
 
+"disable ConqueGDB
+let g:ConqueGdb_Disable = 1
+
 "nnoremap <F5> :ConqueGdbCommand continue<CR>
 "nnoremap <F6> :ConqueGdbCommand run<CR>
 "map <F9> \b
@@ -150,7 +166,33 @@ let g:ConqueTerm_CWInsert = 1
 "nnoremap <F12> :ConqueGdbCommand finish<CR>
 
 "FZF
-nnoremap <C-f> :FZF<CR>
+nnoremap <C-f> :Files<CR>
+nmap <C-b> :Buffers<CR>
+nmap <C-h> :History<CR>
+"nmap <C-m> :Maps<CR>
+"nmap <C-l> :Lines<CR>
+"nmap <C-c> :Commands<CR>
+command! -bang -nargs=* Rgx call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, <bang>0)
+nmap <C-c><C-f> :Rgx <C-R><C-W><CR>
+function! s:get_visual_selection()
+    " Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end] = getpos("'>")[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return ''
+    endif
+    let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    return join(lines, "\n")
+endfunction
+function! s:grep222()
+    let selection = s:get_visual_selection()
+    call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".selection, 1)
+endfunction
+command! -bang Aselection call s:grep222()
+"vmap <C-s><C-s> :<C-U>Rgx s:get_visual_selection()
+vmap <C-c><C-f> :<C-U>Aselection<CR>
 
 "vim beakpoint format to clipboard
 func! CopyAsBreakpoint()
@@ -171,11 +213,51 @@ let g:clang_use_library=1
 "gtags
 :nmap <C-n> :cn<CR>
 :nmap <C-p> :cp<CR>
-:nmap <C-c><C-d> :GtagsCursor<CR>
+":nmap <C-c><C-d> :GtagsCursor<CR>
+:nmap <C-c><C-d> :GscopeFind g <C-R><C-W><cr>
+:nmap <C-c><C-s> :GscopeFind s <C-R><C-W><cr>
 :nmap <C-c><C-c> :cclose<CR>
 :nmap <C-c><C-o> :copen<CR>
 
 "vim-cpp-enhanced-highlight
-let g:cpp_member_variable_highlight = 1
+let g:cpp_member_variable_highlight = 2
+
+"bufstop
+":map <C-b> :BufstopFast<CR>
+
+"guntentags
+" enable gtags module
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+" config project root markers.
+let g:gutentags_project_root = ['.gn','.root']
+
+" generate datebases in my cache directory, prevent gtags files polluting my project
+"let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+" change focus to quickfix window after search (optional).
+let g:gutentags_plus_switch = 1
+
+" disable the default keymaps
+let g:gutentags_plus_nomap = 0
+
+let g:gutentags_define_advanced_commands = 1
+
+let g:gutentags_auto_add_gtags_cscope = 0
+
+	noremap <silent> <leader>cs :GscopeFind s <C-R><C-W><cr>
+	noremap <silent> <leader>cg :GscopeFind g <C-R><C-W><cr>
+	noremap <silent> <leader>cc :GscopeFind c <C-R><C-W><cr>
+	noremap <silent> <leader>ct :GscopeFind t <C-R><C-W><cr>
+	noremap <silent> <leader>ce :GscopeFind e <C-R><C-W><cr>
+	noremap <silent> <leader>cf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent> <leader>ci :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+	noremap <silent> <leader>cd :GscopeFind d <C-R><C-W><cr>
+	noremap <silent> <leader>ca :GscopeFind a <C-R><C-W><cr>
+	noremap <silent> <leader>ck :GscopeKill<cr>
 
 
+" LanguageClient
+"let g:LanguageClient_serverCommands = {
+"  \ 'cpp': ['clangd'],
+"  \ }
