@@ -1,0 +1,68 @@
+
+#
+# C++ related beautifiers (optional)
+#
+
+set print pretty on
+set print object on
+set print static-members on
+set print vtbl on
+set print demangle on
+set demangle-style gnu-v3
+set print sevenbit-strings off
+
+# disable highlight,because cgdb does not support
+set style enabled off
+# disable security load path
+set auto-load safe-path /
+
+#set breakpoint pending on
+
+# GDB catches SIGSEGV in a slow way while demangling symbols.
+maint set catch-demangler-crashes off
+# v9.1: enable multithreaded symbol loading
+maint set worker-threads unlimited
+# v9.1: print return value when use finish command
+set print finish on
+
+# chromium specific
+#source /media/keyou/dev2/chromium64/src/tools/gdb/gdbinit
+source /media/keyou/dev2/chromium64/src/tools/gdb/gdbinit
+print("keyou: load chromium-pretty-printers")
+
+add-auto-load-safe-path /media/keyou/dev/works/devos/kernel/kernel-4-14/scripts/gdb/vmlinux-gdb.py
+
+# chromium gdbinit already register libc++ pretty print
+# support libc++ pretty print
+#source /home/keyou/tools/libcxx-pretty-printers/src/gdbinit
+#python
+#import sys
+#sys.path.insert(0, "/home/keyou/tools/libcxx-pretty-printers/src")
+#from libcxx.v1.printers import register_libcxx_printers
+#register_libcxx_printers (None)
+#end
+
+# support libstdc++ pretty print
+python
+import sys
+sys.path.insert(0, '/home/keyou/tools/libstdc++-v3-pretty-printers')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (None)
+print("keyou: load libstdc++-v3-pretty-printers")
+end
+
+# support blink pretty print 
+python
+import sys
+sys.path.insert(0, "/media/keyou/dev2/chromium64/src/third_party/blink/tools/gdb")
+import blink
+print("keyou: load blink pretty printers")
+end
+
+python
+import sys
+sys.path.insert(0, "/media/keyou/dev2/works/jsdbg-gdb")
+import JsDbg
+print("keyou: load jsdbg-gdb")
+end
+

@@ -1,18 +1,21 @@
 #!/bin/bash
 
-if [ $# -lt 2 ] ; then
-    echo "usage $0 PATH_TO_BINARY TARGET_FOLDER"
-    exit 1
-fi
-
+DRY_RUN=0
 CP='cp -v'
-if [ "$3" == '-p' ] ; then
+PATH_TO_BINARY="$1"
+TARGET_FOLDER="$2"
+
+if [ "$2" == '--dry-run' ]; then
+    DRY_RUN=1
+    CP='echo'
+    TARGET_FOLDER=
+elif [ $# -lt 2 ] ; then
+    echo "usage: $0 PATH_TO_BINARY [TARGET_FOLDER|--dry-run]"
+    exit 1
+elif [ "$3" == '-p' ] ; then
     echo "---> with parents."
     CP='cp -v --parents'
 fi
-
-PATH_TO_BINARY="$1"
-TARGET_FOLDER="$2"
 
 # if we cannot find the the binary we have to abort
 if [ ! -f "$PATH_TO_BINARY" ] ; then
@@ -29,9 +32,11 @@ $CP "$PATH_TO_BINARY" "$TARGET_FOLDER"
 # create directories if required
 echo "---> copy libraries"
 for lib in `ldd "$PATH_TO_BINARY" | cut -d'>' -f2 | awk '{print $1}'` ; do
-   if [ -f "$lib" ] ; then
+    if [ -f "$lib" ] ; then
         $CP "$lib" "$TARGET_FOLDER"
-   fi  
+    else
+        echo "not found: " "$lib"
+    fi  
 done
 
 echo "---> finish."

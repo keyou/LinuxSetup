@@ -4,10 +4,10 @@ set nobackup
 set noswapfile
 set syntax=on
 
-" change tab to 4 spaces
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+" change tab to 2 spaces
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 
 set hidden
@@ -24,6 +24,8 @@ set t_Co=256
 set tags=tags;
 set noautochdir
 let Tlist_auto_open=1
+" use gtags-cscope instead of cscope to support gtags
+set csprg=gtags-cscope
 
 set nocompatible
 highlight LineNr ctermfg=grey
@@ -58,8 +60,8 @@ nnoremap <silent> <C-s> :<C-u>update<CR>
 vnoremap <silent> <C-s> <C-C>:update<CR>
 inoremap <silent> <C-s> <C-C>:update<CR>
 
-nnoremap <Space>p <C-u>
-nnoremap <Space>n <C-d>
+" insert a single letter
+"nnoremap <C-i> i_<Esc>r
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "PlugIn
@@ -91,6 +93,7 @@ Plug 'junegunn/fzf.vim'
 "Plug 'bling/vim-bufferline'
 
 "Plug 'derekwyatt/vim-fswitch'
+" SwitchCpp
 Plug 'ericcurtin/CurtineIncSw.vim'
 
 "Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
@@ -100,7 +103,7 @@ Plug 'ericcurtin/CurtineIncSw.vim'
 Plug 'yegappan/grep'
 
 " Gtags
-"Plug 'aceofall/gtags.vim'
+Plug 'aceofall/gtags.vim'
 
 Plug 'octol/vim-cpp-enhanced-highlight'
 
@@ -213,9 +216,9 @@ let g:clang_use_library=1
 "gtags
 :nmap <C-n> :cn<CR>
 :nmap <C-p> :cp<CR>
-":nmap <C-c><C-d> :GtagsCursor<CR>
-:nmap <C-c><C-d> :GscopeFind g <C-R><C-W><cr>
-:nmap <C-c><C-s> :GscopeFind s <C-R><C-W><cr>
+:nmap <C-c><C-d> :GtagsCursor<CR>
+:nmap <C-c><C-s> :Gtags -s <C-R><C-W><cr>
+:nmap <C-c><C-g> :Gtags -g <C-R><C-W><cr>
 :nmap <C-c><C-c> :cclose<CR>
 :nmap <C-c><C-o> :copen<CR>
 
@@ -227,7 +230,7 @@ let g:cpp_member_variable_highlight = 2
 
 "guntentags
 " enable gtags module
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
+let g:gutentags_modules = [] "['ctags', 'gtags_cscope']
 
 " config project root markers.
 let g:gutentags_project_root = ['.gn','.root']
@@ -256,6 +259,8 @@ let g:gutentags_auto_add_gtags_cscope = 0
 	noremap <silent> <leader>ca :GscopeFind a <C-R><C-W><cr>
 	noremap <silent> <leader>ck :GscopeKill<cr>
 
+" SwitchCpp
+:nmap <M-s> :SwitchCpp<CR>
 
 " LanguageClient
 "let g:LanguageClient_serverCommands = {

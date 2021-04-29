@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load init-v19.1.29"
+echo "load init-v20.4.15"
 
 if [ -n "$BASH_VERSION" ]; then
     IS_BASH=1
@@ -128,7 +128,7 @@ fi
 # Expert config
 export HISTTIMEFORMAT="%Y-%m-%d %T "
 
-export PATH=$SCRIPTPATH/p4merge/bin:$PATH
+#export PATH=$SCRIPTPATH/p4merge/bin:$PATH
 export PATH=$SCRIPTPATH/ripgrep:$PATH
 export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
 export PATH=$SCRIPTPATH/ncdu:$PATH
@@ -144,7 +144,9 @@ alias rg-all='rg --follow --hidden --no-ignore'
 alias em='emacs -nw'
 alias fd-all='fd -HIL'
 alias fzfp="fzf --preview 'cat {}'"
-
+alias adb_start_app="adb shell am start -p" #<package_name>
+alias adb_stop_app="adb shell am force-stop" #<package_name>
+alias adb_list_app="adb shell ps -A | grep -v root"
 
 # http test
 # sudo snap install insomnia 
@@ -162,6 +164,7 @@ if [ "$IS_BASH" = 1 ]; then
     source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
     source $SCRIPTPATH/tmux/tmux.bash-completion
     source $SCRIPTPATH/fd/usr/share/bash-completion/completions/fd
+    source $SCRIPTPATH/share/bash-completion/completions/ffmpeg
 elif [ $IS_ZSH = 1 ]; then
     source $SCRIPTPATH/git/git-prompt.sh
     setopt PROMPT_SUBST
