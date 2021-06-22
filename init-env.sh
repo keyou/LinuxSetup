@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "load init-v20.4.15"
+echo "load keyou shell init v21.6.22"
 
 if [ -n "$BASH_VERSION" ]; then
     IS_BASH=1
@@ -110,8 +110,8 @@ init_tmux_config()
 #######################################################
 # Basic config
 export TERM="xterm-256color"
-export PATH=$SCRIPTPATH/bin:$PATH
-export PATH=$SCRIPTPATH/depot_tools:$PATH
+export PATH=$PATH:$SCRIPTPATH/bin
+export PATH=$PATH:$SCRIPTPATH/depot_tools
 export MANPATH=$SCRIPTPATH/man:$MANPATH
 
 export DEPOT_TOOLS_UPDATE=0
@@ -129,11 +129,11 @@ fi
 export HISTTIMEFORMAT="%Y-%m-%d %T "
 
 #export PATH=$SCRIPTPATH/p4merge/bin:$PATH
-export PATH=$SCRIPTPATH/ripgrep:$PATH
-export PATH=$SCRIPTPATH/fd/usr/bin:$PATH
-export PATH=$SCRIPTPATH/ncdu:$PATH
+export PATH=$PATH:$SCRIPTPATH/ripgrep
+export PATH=$PATH:$SCRIPTPATH/fd/usr/bin
+export PATH=$PATH:$SCRIPTPATH/ncdu
 export MANPATH=$SCRIPTPATH/ncdu:$MANPATH
-export PATH=$SCRIPTPATH/pet:$PATH
+export PATH=$PATH:$SCRIPTPATH/pet
 
 alias e=vim
 alias v=vim
