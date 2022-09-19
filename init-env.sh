@@ -1,6 +1,10 @@
 #!/bin/bash
 
-echo "load keyou shell init v21.6.22"
+if [ -z "$PS1" ]; then
+    return
+fi
+
+echo "load keyou shell init v22.9.19"
 
 if [ -n "$BASH_VERSION" ]; then
     IS_BASH=1
