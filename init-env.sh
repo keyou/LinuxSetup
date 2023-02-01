@@ -163,7 +163,7 @@ alias adb_list_app="adb shell ps -A | grep -v root"
 
 if [ "$IS_BASH" = 1 ]; then
     source $SCRIPTPATH/git/git-prompt.sh
-    PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1)\[\033[0m\]\n\$ '
+    PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\[\033[36m\]$(__git_ps1) \[\e[90m\]$(date "+%H:%M:%S")\[\033[0m\]\n\$ '
 
     source $SCRIPTPATH/ripgrep/complete/rg.bash-completion
     source $SCRIPTPATH/tmux/tmux.bash-completion

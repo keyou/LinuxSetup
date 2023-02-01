@@ -4,6 +4,7 @@ function fish_prompt --description 'Write out the prompt'
     set -l status_color (set_color normal)
     set -l cwd_color (set_color $fish_color_cwd)
     set -l vcs_color (set_color cyan)
+    set -l date_color (set_color 555)
     set -l prompt_status ""
 
     # Since we display the prompt on a new line allow the directory names to be longer.
@@ -22,10 +23,10 @@ function fish_prompt --description 'Write out the prompt'
     # Color the prompt in red on error
     if test $last_status -ne 0
         set status_color (set_color $fish_color_error)
-        set prompt_status $status_color "[" $last_status "]" $normal
+        set prompt_status $status_color "[" $last_status "] " $normal
     end
 
     echo ''
-    echo -s (set_color $fish_color_user) $USER '@' (prompt_hostname) ' ' $cwd_color (prompt_pwd) $vcs_color (fish_vcs_prompt) $normal ' ' $prompt_status
+    echo -s (set_color $fish_color_user) $USER '@' (prompt_hostname) ' ' $cwd_color (prompt_pwd) $vcs_color (fish_vcs_prompt) $normal ' ' $prompt_status $date_color (date "+%H:%M:%S") $normal
     echo -n -s $status_color $suffix ' ' $normal
 end
