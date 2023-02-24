@@ -1,5 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export CHROME_DEVEL_SANDBOX:/home/keyou/dev/chromium/src/out/v88/chrome\x2ddevel\x2dsandbox
+SETUVAR --export DEPOT_TOOLS_UPDATE:0
 SETUVAR __fish_initialized:3100
 SETUVAR fish_color_autosuggestion:4D5566
 SETUVAR fish_color_cancel:\x2d\x2dreverse
@@ -40,4 +42,4 @@ SETUVAR fish_pager_color_selected_background:\x2d\x2dbackground\x3dE6B450
 SETUVAR fish_pager_color_selected_completion:\x1d
 SETUVAR fish_pager_color_selected_description:\x1d
 SETUVAR fish_pager_color_selected_prefix:\x1d
-SETUVAR fish_user_paths:/home/keyou/dev/depot_tools
+SETUVAR fish_user_paths:/home/keyou/\x2elocal/bin\x1e/home/keyou/dev/tools/fd/usr/bin\x1e/home/keyou/dev/depot_tools\x1e/home/keyou/dev/tools/vim/vim/plugged/fzf/bin

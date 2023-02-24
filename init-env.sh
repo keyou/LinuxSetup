@@ -115,7 +115,7 @@ init_tmux_config()
 # Basic config
 export TERM="xterm-256color"
 export PATH=$PATH:$SCRIPTPATH/bin
-export PATH=$PATH:$SCRIPTPATH/depot_tools
+export PATH=$PATH:$SCRIPTPATH/../depot_tools
 export MANPATH=$SCRIPTPATH/man:$MANPATH
 
 export DEPOT_TOOLS_UPDATE=0

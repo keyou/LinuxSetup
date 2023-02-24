@@ -1,0 +1,1 @@
+/home/keyou/dev/tools/vim/vim/plugged/fzf/shell/key-bindings.fish
