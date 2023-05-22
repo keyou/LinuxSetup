@@ -25,3 +25,6 @@ set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
 # To apply the command to ALT-C as well
 set -gx FZF_ALT_C_COMMAND "$FZF_DEFAULT_COMMAND"
 
+set -gx PATH "$PATH:/home/keyou/local/bin:/home/keyou/dev/tools/fd/usr/bin:/home/keyou/dev/depot_tools:/home/keyou/dev/tools/vim/vim/plugged/fzf/bin"
+set -gx PATH "$PATH:/Users/keyou/dev/depot_tools:/home/keyou/dev/depot_tools:/Users/keyou/dev/tools/vim/vim/plugged/fzf/bin"
+
